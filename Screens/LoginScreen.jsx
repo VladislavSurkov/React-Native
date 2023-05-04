@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useFonts } from "expo-font";
 import {
   View,
   Text,
@@ -6,16 +7,24 @@ import {
   StyleSheet,
   ImageBackground,
   TextInput,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
-import { useFonts } from "expo-font";
 
-const initialFocus = {
+const iFocus = {
   email: false,
   password: false,
 };
 
+const iState = {
+  email: "",
+  password: "",
+};
+
 export default function LoginScreen() {
-  const [isFocused, setIsFocused] = useState(initialFocus);
+  const [isFocused, setIsFocused] = useState(iFocus);
+  const [state, setState] = useState(iState);
   const [showPassword, setShowPassword] = useState(true);
   const [fontsLoaded] = useFonts({
     RobotoBold: require("../assets/fonts/RobotoBold.ttf"),
@@ -28,76 +37,100 @@ export default function LoginScreen() {
   }
 
   const handleFocus = (input) => {
-    setIsFocused((prevState) => ({ ...prevState, [input]: true }));
+    setIsFocused((p) => ({ ...p, [input]: true }));
   };
   const handleBlur = (input) => {
-    setIsFocused((prevState) => ({ ...prevState, [input]: false }));
+    setIsFocused((p) => ({ ...p, [input]: false }));
+  };
+
+  const handleSubmit = () => {
+    console.log("email:", state.email);
+    console.log("password:", state.password);
+    setState(iState);
   };
 
   return (
-    <View style={styles.container}>
-      <ImageBackground
-        style={styles.imgBg}
-        source={require("../assets/img/PhotoBG.jpg")}
-      >
-        <View style={styles.regScr}>
-          <Text style={styles.title}>Log In</Text>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <ImageBackground
+          style={styles.imgBg}
+          source={require("../assets/img/PhotoBG.jpg")}
+        >
+          <View style={styles.regScr}>
+            <Text style={styles.title}>Log In</Text>
 
-          <View style={styles.regForm}>
-            <TextInput
-              style={{
-                ...styles.input,
-                borderColor: isFocused.email ? "#FF6C00" : "#E8E8E8",
-                backgroundColor: isFocused.email ? "white" : "#F6F6F6",
-              }}
-              onFocus={() => {
-                handleFocus("email");
-              }}
-              onBlur={() => {
-                handleBlur("email");
-              }}
-              placeholder="E-mail"
-            />
-
-            <View style={styles.inputPass}>
+            <View style={styles.regForm}>
               <TextInput
-                secureTextEntry={showPassword}
                 style={{
                   ...styles.input,
-                  borderColor: isFocused.password ? "#FF6C00" : "#E8E8E8",
-                  backgroundColor: isFocused.password ? "white" : "#F6F6F6",
+                  borderColor: isFocused.email ? "#FF6C00" : "#E8E8E8",
+                  backgroundColor: isFocused.email ? "white" : "#F6F6F6",
                 }}
+                value={state.email}
+                onChangeText={(value) =>
+                  setState((p) => ({ ...p, email: value }))
+                }
                 onFocus={() => {
-                  handleFocus("password");
+                  handleFocus("email");
                 }}
                 onBlur={() => {
-                  handleBlur("password");
+                  handleBlur("email");
                 }}
-                placeholder="Password"
+                placeholder="E-mail"
               />
-              <TouchableOpacity
-                onPress={() => setShowPassword(!showPassword)}
-                style={styles.showPass}
+
+              <KeyboardAvoidingView
+                behavior={Platform.OS == "ios" ? "padding" : "height"}
               >
-                <Text style={styles.textShowPass}>
-                  {showPassword ? "Show" : "Hide"}
+                <View style={styles.inputPass}>
+                  <TextInput
+                    secureTextEntry={showPassword}
+                    style={{
+                      ...styles.input,
+                      borderColor: isFocused.password ? "#FF6C00" : "#E8E8E8",
+                      backgroundColor: isFocused.password ? "white" : "#F6F6F6",
+                    }}
+                    value={state.password}
+                    onChangeText={(value) =>
+                      setState((p) => ({ ...p, password: value }))
+                    }
+                    onFocus={() => {
+                      handleFocus("password");
+                    }}
+                    onBlur={() => {
+                      handleBlur("password");
+                    }}
+                    placeholder="Password"
+                  />
+                  <TouchableOpacity
+                    onPress={() => setShowPassword(!showPassword)}
+                    style={styles.showPass}
+                  >
+                    <Text style={styles.textShowPass}>
+                      {showPassword ? "Show" : "Hide"}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </KeyboardAvoidingView>
+
+              <View>
+                <TouchableOpacity
+                  style={styles.btn}
+                  title="Login"
+                  onPress={handleSubmit}
+                >
+                  <Text style={styles.btnText}> Log in </Text>
+                </TouchableOpacity>
+
+                <Text style={styles.goRegister}>
+                  Don't have an account? Registration
                 </Text>
-              </TouchableOpacity>
-            </View>
-
-            <View>
-              <TouchableOpacity style={styles.btn}>
-                <Text style={styles.btnText}> Log in </Text>
-              </TouchableOpacity>
-
-              <Text style={styles.haveAccount}>
-                Don't have an account? Registration
-              </Text>
+              </View>
             </View>
           </View>
-        </View>
-      </ImageBackground>
-    </View>
+        </ImageBackground>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -185,7 +218,7 @@ const styles = StyleSheet.create({
     lineHeight: 19,
   },
 
-  haveAccount: {
+  goRegister: {
     color: "#1B4371",
     fontSize: 16,
     lineHeight: 19,
