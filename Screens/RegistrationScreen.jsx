@@ -109,7 +109,9 @@ export default function RegistrationScreen() {
                 onPress={() => setShowPassword(!showPassword)}
                 style={styles.showPass}
               >
-                <Text style={styles.textShowPass}> Show / Hide </Text>
+                <Text style={styles.textShowPass}>
+                  {showPassword ? "Show" : "Hide"}
+                </Text>
               </TouchableOpacity>
             </View>
 
