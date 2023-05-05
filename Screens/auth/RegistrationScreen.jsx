@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { useFonts } from "expo-font";
 import { AntDesign } from "@expo/vector-icons";
+import { authStyles as styles } from "./auth.styles";
 import {
   View,
   Text,
   TouchableOpacity,
   Image,
-  StyleSheet,
   ImageBackground,
   TextInput,
   KeyboardAvoidingView,
@@ -26,19 +25,10 @@ const iState = {
   password: "",
 };
 
-export default function RegistrationScreen() {
+export default function RegistrationScreen({ navigation }) {
   const [isFocused, setIsFocused] = useState(iFocus);
   const [state, setState] = useState(iState);
   const [showPassword, setShowPassword] = useState(true);
-  const [fontsLoaded] = useFonts({
-    RobotoBold: require("../assets/fonts/RobotoBold.ttf"),
-    RobotoMedium: require("../assets/fonts/RobotoMedium.ttf"),
-    RobotoRegular: require("../assets/fonts/RobotoRegular.ttf"),
-  });
-
-  if (!fontsLoaded) {
-    return null;
-  }
 
   const handleFocus = (input) => {
     setIsFocused((p) => ({ ...p, [input]: true }));
@@ -47,25 +37,26 @@ export default function RegistrationScreen() {
     setIsFocused((p) => ({ ...p, [input]: false }));
   };
 
-   const handleSubmit = () => {
-     console.log("login:", state.login);
-     console.log("email:", state.email);
-     console.log("password:", state.password);
-     setState(iState);
-   };
+  const handleSubmit = () => {
+    console.log("login:", state.login);
+    console.log("email:", state.email);
+    console.log("password:", state.password);
+    setState(iState);
+    navigation.navigate("Home");
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <ImageBackground
           style={styles.imgBg}
-          source={require("../assets/img/PhotoBG.jpg")}
+          source={require("../../assets/img/PhotoBG.jpg")}
         >
           <View style={styles.regScr}>
             <View style={styles.avatarBox}>
               <Image
                 style={styles.avatarImg}
-                source={require("../assets/img/noAvatar.png")}
+                source={require("../../assets/img/noAvatar.png")}
               />
               <AntDesign
                 name="closecircleo"
@@ -76,7 +67,7 @@ export default function RegistrationScreen() {
               />
             </View>
 
-            <Text style={styles.title}>Registration</Text>
+            <Text style={{ ...styles.title, marginTop: 92 }}>Registration</Text>
 
             <View style={styles.regForm}>
               <TextInput
@@ -131,7 +122,7 @@ export default function RegistrationScreen() {
                     placeholder="Password"
                     value={state.password}
                     onChangeText={(value) =>
-                      setState((p) => ({...p, password: value }))
+                      setState((p) => ({ ...p, password: value }))
                     }
                     onFocus={() => {
                       handleFocus("password");
@@ -161,9 +152,14 @@ export default function RegistrationScreen() {
                   <Text style={styles.btnText}> Register </Text>
                 </TouchableOpacity>
 
-                <Text style={styles.goLogin}>
-                  Already have an account? Log in
-                </Text>
+                <TouchableOpacity
+                  title="Register"
+                  onPress={() => navigation.navigate("Login")}
+                >
+                  <Text style={styles.haveAnAccount}>
+                    Already have an account? Log in
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -172,105 +168,3 @@ export default function RegistrationScreen() {
     </TouchableWithoutFeedback>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    fontFamily: "RobotoRegular",
-  },
-  imgBg: {
-    flex: 1,
-    resizeMode: "contain",
-    alignItems: "center",
-    justifyContent: "flex-end",
-  },
-  regScr: {
-    paddingHorizontal: 16,
-    width: "100%",
-    height: "69%",
-    backgroundColor: "#FFFFFF",
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-    alignItems: "center",
-    position: "relative",
-  },
-
-  avatarBox: {
-    position: "absolute",
-    width: 120,
-    height: 120,
-    backgroundColor: "#F6F6F6",
-    borderRadius: 16,
-    top: -60,
-  },
-  avatarImg: {
-    height: "100%",
-    width: "100%",
-    borderRadius: 8,
-    resizeMode: "contain",
-  },
-
-  addRemovePhoto: {
-    position: "absolute",
-    left: 108,
-    top: 80,
-    borderRadius: 12.5,
-  },
-
-  title: {
-    marginTop: 92,
-    fontFamily: "RobotoMedium",
-    fontSize: 30,
-    lineHeight: 35,
-    letterSpacing: 0.01,
-  },
-  regForm: {
-    marginTop: 33,
-    gap: 16,
-  },
-  input: {
-    height: 50,
-    width: 343,
-    marginHorizontal: 16,
-    paddingHorizontal: 16,
-
-    borderWidth: 1,
-    borderRadius: 8,
-
-    color: "#212121",
-    fontSize: 16,
-  },
-
-  inputPass: {
-    position: "relative",
-  },
-
-  showPass: {
-    position: "absolute",
-    right: 32,
-    top: 16,
-    color: "#1B4371",
-    fontSize: 16,
-  },
-  btn: {
-    marginTop: 27,
-    backgroundColor: "#FF6C00",
-    marginHorizontal: 16,
-    padding: 16,
-    alignItems: "center",
-    borderRadius: 100,
-  },
-  btnText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    lineHeight: 19,
-  },
-  goLogin: {
-    color: "#1B4371",
-    fontSize: 16,
-    lineHeight: 19,
-    textAlign: "center",
-    marginTop: 16,
-  },
-});

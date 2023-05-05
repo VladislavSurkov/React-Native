@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { useFonts } from "expo-font";
+import { authStyles as styles } from "./auth.styles";
 import {
   View,
   Text,
   TouchableOpacity,
-  StyleSheet,
   ImageBackground,
   TextInput,
   KeyboardAvoidingView,
@@ -22,19 +21,10 @@ const iState = {
   password: "",
 };
 
-export default function LoginScreen() {
+export default function LoginScreen({ navigation }) {
   const [isFocused, setIsFocused] = useState(iFocus);
   const [state, setState] = useState(iState);
   const [showPassword, setShowPassword] = useState(true);
-  const [fontsLoaded] = useFonts({
-    RobotoBold: require("../assets/fonts/RobotoBold.ttf"),
-    RobotoMedium: require("../assets/fonts/RobotoMedium.ttf"),
-    RobotoRegular: require("../assets/fonts/RobotoRegular.ttf"),
-  });
-
-  if (!fontsLoaded) {
-    return null;
-  }
 
   const handleFocus = (input) => {
     setIsFocused((p) => ({ ...p, [input]: true }));
@@ -47,6 +37,7 @@ export default function LoginScreen() {
     console.log("email:", state.email);
     console.log("password:", state.password);
     setState(iState);
+    navigation.navigate("Home");
   };
 
   return (
@@ -54,10 +45,10 @@ export default function LoginScreen() {
       <View style={styles.container}>
         <ImageBackground
           style={styles.imgBg}
-          source={require("../assets/img/PhotoBG.jpg")}
+          source={require("../../assets/img/PhotoBG.jpg")}
         >
           <View style={styles.regScr}>
-            <Text style={styles.title}>Log In</Text>
+            <Text style={{...styles.title,  marginTop: 32}}>Log In</Text>
 
             <View style={styles.regForm}>
               <TextInput
@@ -122,9 +113,14 @@ export default function LoginScreen() {
                   <Text style={styles.btnText}> Log in </Text>
                 </TouchableOpacity>
 
-                <Text style={styles.goRegister}>
-                  Don't have an account? Registration
-                </Text>
+                <TouchableOpacity
+                  title="Registration"
+                  onPress={() => navigation.navigate("Registration")}
+                >
+                  <Text style={styles.haveAnAccount}>
+                    Don't have an account? Registration
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -134,95 +130,4 @@ export default function LoginScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    fontFamily: "RobotoRegular",
-  },
 
-  imgBg: {
-    flex: 1,
-    resizeMode: "contain",
-    alignItems: "center",
-    justifyContent: "flex-end",
-  },
-
-  regScr: {
-    paddingHorizontal: 16,
-    paddingBottom: 32,
-    width: "100%",
-    height: "69%",
-    backgroundColor: "#FFFFFF",
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-    alignItems: "center",
-    position: "relative",
-  },
-
-  title: {
-    marginTop: 32,
-    fontFamily: "RobotoMedium",
-    fontSize: 30,
-    lineHeight: 35,
-    letterSpacing: 0.01,
-  },
-
-  regForm: {
-    marginTop: 33,
-    gap: 16,
-  },
-
-  input: {
-    height: 50,
-    width: 343,
-    marginHorizontal: 16,
-    paddingHorizontal: 16,
-
-    borderWidth: 1,
-    borderRadius: 8,
-    borderColor: "#E8E8E8",
-
-    color: "#212121",
-    placeholderTextColor: "#BDBDBD",
-    fontSize: 16,
-  },
-
-  inputPass: {
-    position: "relative",
-  },
-
-  showPass: {
-    position: "absolute",
-    right: 10,
-    top: 0,
-    fontSize: 16,
-    padding: 17,
-  },
-  textShowPass: {
-    color: "#1B4371",
-  },
-
-  btn: {
-    marginTop: 27,
-    backgroundColor: "#FF6C00",
-    marginHorizontal: 16,
-    padding: 16,
-    alignItems: "center",
-    borderRadius: 100,
-  },
-
-  btnText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    lineHeight: 19,
-  },
-
-  goRegister: {
-    color: "#1B4371",
-    fontSize: 16,
-    lineHeight: 19,
-    textAlign: "center",
-    marginTop: 16,
-  },
-});
