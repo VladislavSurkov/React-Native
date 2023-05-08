@@ -76,9 +76,9 @@ export default function RegistrationScreen({ navigation }) {
         >
           <View style={styles.regScr}>
             <View style={styles.avatarWrapper}>
-              {/* <View style={styles.avatar}> */}
+              <View style={styles.avatar}>
                 <Avatar avatarImg={avatarImg} setAvatarImg={setAvatarImg} />
-              {/* </View> */}
+              </View>
             </View>
 
             <Text style={{ ...styles.title, marginTop: 92 }}>Registration</Text>

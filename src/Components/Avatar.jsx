@@ -1,20 +1,19 @@
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { AntDesign } from "@expo/vector-icons";
-import uploadPhotoToServer, {
-  firebaseStore,
-} from "../api/uploadPhotoToServer";
+import uploadPhotoToServer, { firebaseStore } from "../api/uploadPhotoToServer";
 import { useDispatch, useSelector } from "react-redux";
 import authSelectors from "../redux/auth/authSelectors";
-import authOperations from "../redux/auth/authOperations";
+import {authUpdateAvatar} from "../redux/auth/authOperations";
 
 export default function Avatar({ avatarImg, setAvatarImg }) {
   const dispatch = useDispatch();
   const user = useSelector(authSelectors.getUser);
 
   const addImage = async () => {
+         dispatch(authUpdateAvatar(""));
     if (avatarImg) {
-      dispatch(authOperations.authUpdateAvatar(""));
+      dispatch(authUpdateAvatar(""));
       setAvatarImg("");
       return;
     }
@@ -32,8 +31,9 @@ export default function Avatar({ avatarImg, setAvatarImg }) {
         firebaseStore.avatar
       );
       setAvatarImg(photoUrl);
+
       if (user.currentUser) {
-        dispatch(authOperations.authUpdateAvatar(photoUrl));
+        dispatch(authUpdateAvatar(photoUrl));
       }
     }
   };
@@ -78,6 +78,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   addRemovePhoto: {
-
+    backgroundColor: "transparent",
   },
 });

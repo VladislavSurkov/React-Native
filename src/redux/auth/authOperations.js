@@ -6,12 +6,11 @@ import {
   signOut,
 } from "firebase/auth";
 import { authSlice } from "./authSlice";
-import { auth } from "../../firebase/config"
+import { auth } from "../../firebase/config";
 import { toastError } from "../../helpers/toastMessage";
-  
 
-
-export const register = async ({ login, email, password }) => 
+export const register =
+  async ({ login, email, password }) =>
   async (dispatch) => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
@@ -20,7 +19,7 @@ export const register = async ({ login, email, password }) =>
         photoURL,
       });
       const user = auth.currentUser;
-      
+
       dispatch(
         authSlice.actions.updateUserProfile({
           userId: user.uid,
@@ -35,8 +34,9 @@ export const register = async ({ login, email, password }) =>
     }
   };
 
-export const login = async ({ email, password }) => 
-    async (dispatch) => {
+export const login =
+  async ({ email, password }) =>
+  async (dispatch) => {
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
       dispatch(
@@ -53,7 +53,6 @@ export const login = async ({ email, password }) =>
     }
   };
 
-
 export const logout = () => async (dispatch) => {
   try {
     await signOut(auth);
@@ -64,15 +63,14 @@ export const logout = () => async (dispatch) => {
   }
 };
 
- export const authUpdateAvatar = (photoURL) => async (dispatch) => {
+export const authUpdateAvatar = (photoURL) => async (dispatch) => {
   try {
-    await updateProfile(auth.currentUser, {
-      photoURL,
-    });
     const user = auth.currentUser;
+    if (user) await updateProfile(auth.currentUser, { photoURL });
+
     dispatch(
       authSlice.actions.updateUserAvatar({
-        userAvatar: user.photoURL,
+        userAvatar: photoURL,
       })
     );
   } catch (error) {

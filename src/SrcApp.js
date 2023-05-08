@@ -1,7 +1,7 @@
 import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 import authSelectors from "./redux/auth/authSelectors";
 
 import LoginScreen from "./Screens/auth/LoginScreen";
@@ -14,7 +14,7 @@ const MainStack = createStackNavigator();
 const AuthStack = createStackNavigator();
 
 export default function SrcApp() {
-    const {currentUser} = useSelector(authSelectors.getUser);;
+  const { currentUser } = useSelector(authSelectors.getUser);
   return (
     <NavigationContainer>
       {currentUser ? (
