@@ -15,7 +15,7 @@ export default function CommentsScreen() {
     <View style={styles.container}>
       <Image
         style={styles.photo}
-        source={require("../assets/img/PhotoBG.jpg")}
+        source={require("../../assets/img/PhotoBG.jpg")}
       />
       <View>
         <TextInput placeholder="Comment" style={styles.inputComment} />

@@ -1,17 +1,20 @@
 import React, { useState } from "react";
-import { AntDesign } from "@expo/vector-icons";
+import { useDispatch } from "react-redux";
 import { authStyles as styles } from "./auth.styles";
+import Toast from "react-native-toast-message";
 import {
   View,
   Text,
   TouchableOpacity,
-  Image,
   ImageBackground,
   TextInput,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+
+import { register } from "../../redux/auth/authOperations";
+import Avatar from "../../Components/Avatar";
 
 const iFocus = {
   email: false,
@@ -26,9 +29,11 @@ const iState = {
 };
 
 export default function RegistrationScreen({ navigation }) {
+  const dispatch = useDispatch();
   const [isFocused, setIsFocused] = useState(iFocus);
   const [state, setState] = useState(iState);
   const [showPassword, setShowPassword] = useState(true);
+  const [avatarImg, setAvatarImg] = useState("");
 
   const handleFocus = (input) => {
     setIsFocused((p) => ({ ...p, [input]: true }));
@@ -38,11 +43,28 @@ export default function RegistrationScreen({ navigation }) {
   };
 
   const handleSubmit = () => {
-    console.log("login:", state.login);
-    console.log("email:", state.email);
-    console.log("password:", state.password);
+    if (avatarImg === "") {
+      Toast.show({
+        type: "error",
+        text1: "Avatar error:",
+        text2: "Avatar must be filled",
+      });
+      return;
+    }
+    if (
+      values.email === "" ||
+      values.password === "" ||
+      values.nickname === ""
+    ) {
+      Toast.show({
+        type: "error",
+        text1: "Form error:",
+        text2: "Email, Password and Nickname must be filled.",
+      });
+      return;
+    }
+    dispatch(register(state));
     setState(iState);
-    navigation.navigate("Home");
   };
 
   return (
@@ -50,21 +72,13 @@ export default function RegistrationScreen({ navigation }) {
       <View style={styles.container}>
         <ImageBackground
           style={styles.imgBg}
-          source={require("../../assets/img/PhotoBG.jpg")}
+          source={require("../../../assets/img/PhotoBG.jpg")}
         >
           <View style={styles.regScr}>
-            <View style={styles.avatarBox}>
-              <Image
-                style={styles.avatarImg}
-                source={require("../../assets/img/noAvatar.png")}
-              />
-              <AntDesign
-                name="closecircleo"
-                style={styles.addRemovePhoto}
-                size={25}
-                color="#FF6C00"
-                backgroundColor="white"
-              />
+            <View style={styles.avatarWrapper}>
+              {/* <View style={styles.avatar}> */}
+                <Avatar avatarImg={avatarImg} setAvatarImg={setAvatarImg} />
+              {/* </View> */}
             </View>
 
             <Text style={{ ...styles.title, marginTop: 92 }}>Registration</Text>
@@ -95,6 +109,9 @@ export default function RegistrationScreen({ navigation }) {
                   borderColor: isFocused.email ? "#FF6C00" : "#E8E8E8",
                   backgroundColor: isFocused.email ? "white" : "#F6F6F6",
                 }}
+                autoComplete="email"
+                keyboardType="email-address"
+                textContentType="emailAddress"
                 placeholder="E-mail"
                 value={state.email}
                 onChangeText={(value) =>
@@ -107,7 +124,6 @@ export default function RegistrationScreen({ navigation }) {
                   handleBlur("email");
                 }}
               />
-
               <KeyboardAvoidingView
                 behavior={Platform.OS == "ios" ? "padding" : "height"}
               >

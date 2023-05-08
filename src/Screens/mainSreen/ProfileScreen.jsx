@@ -9,13 +9,13 @@ export default function ProfileScreen() {
     <View style={styles.profileContainer}>
       <ImageBackground
         style={styles.profileImgBg}
-        source={require("../../assets/img/PhotoBG.jpg")}
+        source={require("../../../assets/img/PhotoBG.jpg")}
       >
         <View style={styles.profileRegScr}>
           <View style={styles.profileAvatarBox}>
             <Image
               style={styles.profileAvatarImg}
-              source={require("../../assets/img/noAvatar.png")}
+              source={require("../../../assets/img/noAvatar.png")}
             />
             <AntDesign
               name="closecircleo"

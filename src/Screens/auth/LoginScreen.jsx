@@ -1,3 +1,4 @@
+import Toast from "react-native-toast-message";
 import React, { useState } from "react";
 import { authStyles as styles } from "./auth.styles";
 import {
@@ -11,6 +12,9 @@ import {
   Keyboard,
 } from "react-native";
 
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../../redux/auth/authOperations";
+
 const iFocus = {
   email: false,
   password: false,
@@ -22,6 +26,7 @@ const iState = {
 };
 
 export default function LoginScreen({ navigation }) {
+  const dispatch = useDispatch();
   const [isFocused, setIsFocused] = useState(iFocus);
   const [state, setState] = useState(iState);
   const [showPassword, setShowPassword] = useState(true);
@@ -34,10 +39,16 @@ export default function LoginScreen({ navigation }) {
   };
 
   const handleSubmit = () => {
-    console.log("email:", state.email);
-    console.log("password:", state.password);
+    if (values.email === "" || values.password === "") {
+      Toast.show({
+        type: "error",
+        text1: "Form error:",
+        text2: "Email and Password must be filled ."
+      });
+      return;
+    }
+    dispatch(login(state));
     setState(iState);
-    navigation.navigate("Home");
   };
 
   return (
@@ -45,10 +56,10 @@ export default function LoginScreen({ navigation }) {
       <View style={styles.container}>
         <ImageBackground
           style={styles.imgBg}
-          source={require("../../assets/img/PhotoBG.jpg")}
+          source={require("../../../assets/img/PhotoBG.jpg")}
         >
           <View style={styles.regScr}>
-            <Text style={{...styles.title,  marginTop: 32}}>Log In</Text>
+            <Text style={{ ...styles.title, marginTop: 32 }}>Log In</Text>
 
             <View style={styles.regForm}>
               <TextInput
@@ -69,7 +80,6 @@ export default function LoginScreen({ navigation }) {
                 }}
                 placeholder="E-mail"
               />
-
               <KeyboardAvoidingView
                 behavior={Platform.OS == "ios" ? "padding" : "height"}
               >
@@ -129,5 +139,3 @@ export default function LoginScreen({ navigation }) {
     </TouchableWithoutFeedback>
   );
 }
-
-

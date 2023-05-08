@@ -15,7 +15,7 @@ export default function PostsScreen({ route, navigation }) {
       <View style={styles.postsAvatarContainer}>
         <Image
           style={styles.postsAvatarImg}
-          source={require("../../assets/img/noAvatar.png")}
+          source={require("../../../assets/img/noAvatar.png")}
         />
         <View style={styles.postsAvatarData}>
           <Text style={styles.postsAvatarName}>Natali Romanova</Text>
@@ -26,7 +26,7 @@ export default function PostsScreen({ route, navigation }) {
       <View>
         <Image
           style={styles.postsPhoto}
-          source={require("../../assets/img/PhotoBG.jpg")}
+          source={require("../../../assets/img/PhotoBG.jpg")}
         />
         <Text style={styles.postsLocationName}>Wood</Text>
 

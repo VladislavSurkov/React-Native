@@ -1,19 +1,15 @@
-import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
+import { PersistGate } from "redux-persist/integration/react";
+import { Provider } from "react-redux";
+import { store, persistor } from "./src/redux/store";
+import Toast from "react-native-toast-message";
+
 import { useCallback } from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
+import SrcApp from './src/SrcApp';
 
-import LoginScreen from "./Screens/auth/LoginScreen";
-import RegistrationScreen from "./Screens/auth/RegistrationScreen";
-import Home from "./Screens/mainSreen/Home";
-import CommentsScreen from "./Screens/CommentsScreen";
-import MapScreen from "./Screens/MapScreen";
-
-const MainStack = createStackNavigator();
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -32,39 +28,15 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container} onLayout={onLayoutRootView}>
-      <StatusBar style="auto" />
-
-      <NavigationContainer>
-        <MainStack.Navigator initialRouteName="Registration">
-          <MainStack.Screen
-            name="Login"
-            component={LoginScreen}
-            options={{ headerShown: false }}
-          />
-          <MainStack.Screen
-            name="Registration"
-            component={RegistrationScreen}
-            options={{ headerShown: false }}
-          />
-          <MainStack.Screen
-            name="Home"
-            component={Home}
-            options={{ headerShown: false }}
-          />
-          <MainStack.Screen
-            name="Comments"
-            component={CommentsScreen}
-            options={{ headerShown: true }}
-          />
-          <MainStack.Screen
-            name="Map"
-            component={MapScreen}
-            options={{ headerShown: true }}
-          />
-        </MainStack.Navigator>
-      </NavigationContainer>
-    </View>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <View style={styles.container} onLayout={onLayoutRootView}>
+          <StatusBar style="auto" />
+          <SrcApp />
+          <Toast />
+        </View>
+      </PersistGate>
+    </Provider>
   );
 }
 

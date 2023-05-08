@@ -25,28 +25,20 @@ export const authStyles = StyleSheet.create({
     alignItems: "center",
     position: "relative",
   },
-  avatarBox: {
-    position: "absolute",
-    width: 120,
-    height: 120,
-    backgroundColor: "#F6F6F6",
-    borderRadius: 16,
-    top: -60,
-  },
-  avatarImg: {
-    height: "100%",
-    width: "100%",
-    borderRadius: 8,
-    resizeMode: "contain",
-  },
 
-  addRemovePhoto: {
+  avatarWrapper: {
     position: "absolute",
-    left: 108,
-    top: 80,
-    borderRadius: 12.5,
+    top: 0,
+    right: 0,
+    left: 0,
+    height: 0,
+    justifyContent: "center",
+    alignItems: "center",
   },
-
+  avatar: {
+    position: "absolute",
+  },
+  
   title: {
     fontFamily: "RobotoMedium",
     fontSize: 30,
