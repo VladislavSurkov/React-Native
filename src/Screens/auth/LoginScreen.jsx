@@ -21,8 +21,8 @@ const iFocus = {
 };
 
 const iState = {
-  email: "",
-  password: "",
+  email: "Aaa@mail.com",
+  password: "Aaa123",
 };
 
 export default function LoginScreen({ navigation }) {

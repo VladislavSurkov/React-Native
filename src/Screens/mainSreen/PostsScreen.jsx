@@ -1,57 +1,52 @@
-import React from "react";
-import { EvilIcons, Feather } from "@expo/vector-icons";
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import React, { useEffect } from "react";
+import { View, Text, Image } from "react-native";
 import { mainStyles as styles } from "./main.styles";
+import { useDispatch, useSelector } from "react-redux";
+import authSelectors from './../../redux/auth/authSelectors';
+import postsSelectors from './../../redux/posts/postsSelectors';
+import { getAllPosts } from './../../redux/posts/postsOperation';
+import { ScrollView } from "react-native-gesture-handler";
+import PostCard from "../../Components/PostCard";
 
-export default function PostsScreen({ route, navigation }) {
+export default function PostsScreen() {
+    const posts = useSelector(postsSelectors.getPosts);
+    const user = useSelector(authSelectors.getUser);
+    const dispatch = useDispatch();
 
-  if (route.params) {
-    const { photo, location, state } = route.params;
-    console.log(photo, location, state);
-  }
+    useEffect(() => {
+      dispatch(getAllPosts());
+    }, [dispatch]);
   
   return (
-    <View style={styles.postsContainer}>
-      <View style={styles.postsAvatarContainer}>
-        <Image
-          style={styles.postsAvatarImg}
-          source={require("../../../assets/img/noAvatar.png")}
-        />
-        <View style={styles.postsAvatarData}>
-          <Text style={styles.postsAvatarName}>Natali Romanova</Text>
-          <Text style={styles.postsAvatarEmail}>email@example.com</Text>
+    <ScrollView style={{ flex: 1 }}>
+      <View style={styles.postsContainer}>
+        <View style={styles.postsAvatarContainer}>
+          <Image
+            style={styles.postsAvatarImg}
+            source={{ uri: user.userAvatar }}
+          />
+          <View style={styles.postsAvatarData}>
+            <Text style={styles.postsAvatarName}>{user.nickName}</Text>
+            <Text style={styles.postsAvatarEmail}>{user.userEmail}</Text>
+          </View>
+        </View>
+        <View>
+          {posts.map((post) => (
+            <View key={post.id} style={{ marginBottom: 10 }}>
+              <PostCard
+                title={post.title}
+                likeCount={post.likeCount}
+                imgUrl={post.imgUrl}
+                imgUri={post.imgUri}
+                location={post.location}
+                locationData={post.locationData}
+                comments={post.comments}
+                post={post}
+              />
+            </View>
+          ))}
         </View>
       </View>
-
-      <View>
-        <Image
-          style={styles.postsPhoto}
-          source={require("../../../assets/img/PhotoBG.jpg")}
-        />
-        <Text style={styles.postsLocationName}>Wood</Text>
-
-        <View style={styles.postsIconsContainer}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Comments")}
-            activeOpacity={0.8}
-            style={styles.postsInnerWrapperIcons}
-          >
-            <Feather name="message-circle" size={24} color="#BDBDBD" />
-            <Text style={styles.postsMesseges}>3</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Map")}
-            activeOpacity={0.8}
-            style={styles.postsInnerWrapperIcons}
-          >
-            <EvilIcons name="location" size={24} color="#BDBDBD" />
-            <Text style={styles.postsLocation}>
-              Ivano-Frankivs'k Region, Ukraine
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </View>
+    </ScrollView>
   );
 }

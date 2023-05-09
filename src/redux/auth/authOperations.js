@@ -5,9 +5,11 @@ import {
   onAuthStateChanged,
   signOut,
 } from "firebase/auth";
+import { getStorage, ref, deleteObject } from "firebase/storage";
 import { authSlice } from "./authSlice";
 import { auth } from "../../firebase/config";
 import { toastError } from "../../helpers/toastMessage";
+import { postsAction } from "../posts/postsSlice";
 
 export const register =
   ({ login, email, password, photoURL }) =>
@@ -57,7 +59,7 @@ export const logout = () => async (dispatch) => {
   try {
     await signOut(auth);
     dispatch(authSlice.actions.authLogOut());
-    dispatch(postsSlice.actions.reset());
+    dispatch(postsAction.reset());
   } catch (e) {
     toastError(e);
   }
@@ -73,9 +75,27 @@ export const authUpdateAvatar = (photoURL) => async (dispatch) => {
         userAvatar: photoURL,
       })
     );
+    console.log("update",photoURL);
   } catch (error) {
     toastError(error);
   }
+};
+
+export const deleteAvatar = (photoURL, str) => async (dispatch) => {
+  // const storage = getStorage();
+
+  // const desertRef = ref(storage, photoURL);
+
+  // deleteObject(desertRef)
+  //   .then(() => {
+  //      dispatch(
+  //        authSlice.actions.updateUserAvatar({
+  //          userAvatar: str,
+  //        })
+  //      );
+  //     console.log("ok");
+  //   })
+  //   .catch((error) => {});
 };
 
 export const authCurrentUser = () => async (dispatch) => {

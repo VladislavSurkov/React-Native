@@ -1,13 +1,14 @@
 import React from "react";
-import { Feather, SimpleLineIcons, Ionicons } from "@expo/vector-icons";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import { Feather, SimpleLineIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Text, View } from "react-native";
 import { mainStyles as styles } from "./main.styles";
 
+import LogOutIcon from "../../Components/LogoutIcon";
 import CreatePostsScreen from "../CreatePostsScreen";
 import ProfileScreen from "./ProfileScreen";
 import PostsScreen from "./PostsScreen";
+import ReturnIcon from "../../Components/ReturnIcon";
 
 const HomeTab = createBottomTabNavigator();
 
@@ -45,13 +46,7 @@ export default function Home() {
           header: ({ _, route }) => (
             <View style={styles.homeContainer}>
               <Text style={styles.title}>{route.name}</Text>
-              <Ionicons
-                name="exit-outline"
-                style={styles.exitSvg}
-                size={28}
-                color="#BDBDBD"
-                backgroundColor="transparent"
-              />
+              <LogOutIcon />
             </View>
           ),
         }}
@@ -61,21 +56,16 @@ export default function Home() {
         component={CreatePostsScreen}
         options={{
           headerShown: true,
+          tabBarStyle: { display: "none" },
           header: ({ _, route }) => (
             <View style={styles.homeContainer}>
-              <AntDesign
-                name="arrowleft"
-                style={styles.returnSvg}
-                size={28}
-                color={"#BDBDBD"}
-                backgroundColor={"transparent"}
-                header={20}
-              />
+              <ReturnIcon />
               <Text style={styles.title}>{route.name}</Text>
             </View>
           ),
         }}
-      />
+      >
+      </HomeTab.Screen>
       <HomeTab.Screen
         name="Profile"
         component={ProfileScreen}

@@ -4,14 +4,14 @@ import * as MediaLibrary from "expo-media-library";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useEffect, useState } from "react";
 import { Feather, Ionicons } from "@expo/vector-icons";
-import { Animated } from "react-native";
+
 
 
 export const CameraComponent = ({ location, photo, makePhoto, setCameraRef }) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
   const [errorMsg, setErrorMsg] = useState(null);
-  const [gesturePosition, setGesturePosition] = useState( new Animated.ValueXY() );
+
 
   useEffect(() => {
     (async () => {

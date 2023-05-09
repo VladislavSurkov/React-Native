@@ -25,16 +25,6 @@ export const mainStyles = StyleSheet.create({
   },
 
   //Home Navigate
-  returnSvg: {
-    position: "absolute",
-    left: 16,
-    bottom: 10,
-  },
-  exitSvg: {
-    position: "absolute",
-    right: 16,
-    bottom: 10,
-  },
   exitProfile: {
     position: "absolute",
     right: 16,
@@ -65,6 +55,7 @@ export const mainStyles = StyleSheet.create({
   postsAvatarImg: {
     width: 60,
     height: 60,
+    borderRadius: 10
   },
 
   postsAvatarData: {
@@ -85,48 +76,6 @@ export const mainStyles = StyleSheet.create({
     lineHeight: 13,
   },
 
-  postsPhoto: {
-    width: "100%",
-    height: 240,
-    alignSelf: "center",
-    borderRadius: 8,
-    marginBottom: 8,
-  },
-  postsLocationName: {
-    fontFamily: "RobotoMedium",
-    fontSize: 16,
-    lineHeight: 19,
-    marginBottom: 11,
-  },
-
-  postsIconsContainer: {
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-
-  postsMesseges: {
-    marginLeft: 9,
-    fontFamily: "RobotoRegular",
-    fontSize: 16,
-    lineHeight: 19,
-    color: "#BDBDBD",
-  },
-
-  postsLocation: {
-    fontFamily: "RobotoRegular",
-    fontSize: 16,
-    lineHeight: 19,
-    color: "#212121",
-    textDecorationLine: "underline",
-  },
-
-  postsInnerWrapperIcons: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-  },
-
   // Profile
   profileImgBg: {
     flex: 1,
@@ -142,7 +91,6 @@ export const mainStyles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-    alignItems: "center",
     position: "relative",
   },
   profileAvatarBox: {

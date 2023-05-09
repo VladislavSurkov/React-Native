@@ -4,16 +4,17 @@ import { AntDesign } from "@expo/vector-icons";
 import uploadPhotoToServer, { firebaseStore } from "../api/uploadPhotoToServer";
 import { useDispatch, useSelector } from "react-redux";
 import authSelectors from "../redux/auth/authSelectors";
-import { authUpdateAvatar } from "../redux/auth/authOperations";
+import { authUpdateAvatar, deleteAvatar } from "../redux/auth/authOperations";
 
 export default function Avatar({ avatarImg, setAvatarImg }) {
   const dispatch = useDispatch();
   const user = useSelector(authSelectors.getUser);
 
   const addImage = async () => {
-    dispatch(authUpdateAvatar(""));
-    if (avatarImg) {
+
+    if (avatarImg && user.currentUser) {
       dispatch(authUpdateAvatar(""));
+      // dispatch(deleteAvatar(avatarImg, ""));
       setAvatarImg("");
       return;
     }
@@ -42,13 +43,11 @@ export default function Avatar({ avatarImg, setAvatarImg }) {
     <View style={styles.container}>
       {avatarImg && <Image style={styles.img} source={{ uri: avatarImg }} />}
       <TouchableOpacity style={styles.btn} onPress={addImage}>
-        <AntDesign
-          name="closecircleo"
-          style={styles.addRemovePhoto}
-          size={25}
-          color={avatarImg ? "#BDBDBD" : "#FF6C00"}
-          backgroundColor="white"
-        />
+        {avatarImg ? (
+          <AntDesign name="closecircleo" size={25} color="#BDBDBD" />
+        ) : (
+          <AntDesign name="pluscircleo" size={25} color="#FF6C00" />
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -76,8 +75,5 @@ const styles = StyleSheet.create({
     height: 25,
     backgroundColor: "#F6F6F6",
     borderRadius: 16,
-  },
-  addRemovePhoto: {
-    backgroundColor: "transparent",
   },
 });

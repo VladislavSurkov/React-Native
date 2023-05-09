@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { AntDesign, Feather, EvilIcons } from "@expo/vector-icons";
-import { CameraComponent} from "../Components/Camera";
+import { CameraComponent } from "../Components/Camera";
 import * as MediaLibrary from "expo-media-library";
 import * as Location from "expo-location";
+import uuid from "react-native-uuid";
+import uploadPhotoToServer, { firebaseStore } from "../api/uploadPhotoToServer";
+import { useDispatch } from "react-redux";
+import { uploadPostToServer } from "./../redux/posts/postsOperation";
 import {
   StyleSheet,
   Text,
@@ -14,13 +18,14 @@ import {
   Keyboard,
 } from "react-native";
 
+
 const iState = {
-  name: "",
+  title: "",
   place: "",
 };
 
 const iFocus = {
-  name: false,
+  title: false,
   place: false,
 };
 
@@ -30,6 +35,7 @@ export default function CreatePostsScreen({ navigation }) {
   const [location, setLocation] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
   const [photo, setPhoto] = useState("");
+  const dispatch = useDispatch();
 
   const makePhoto = async () => {
     const photo = await cameraRef.takePictureAsync();
@@ -45,15 +51,33 @@ export default function CreatePostsScreen({ navigation }) {
     setCameraRef(cameraRef);
   };
 
-  const uploadPhoto = () => {
-    navigation.navigate("PostsScreen", {
-        photo,
-        location,
-        state,
-    });
+  const uploadPhoto = async () => {
+    const photoUrl = await uploadPhotoToServer(photo, firebaseStore.post);
+    const data = {
+      ...state,
+      photo: photoUrl,
+      location,
+      createdAt: Date.now(),
+    };
+    const newPost = {
+      id: uuid.v4(),
+      title: data.title,
+      messageCount: 0,
+      likeCount: 0,
+      imgUri: data.photo,
+      location: data.place,
+      locationData: {
+        latitude: data?.location?.latitude ?? 0,
+        longitude: data?.location?.longitude ?? 0,
+      },
+      comments: [],
+    };
+    dispatch(uploadPostToServer(newPost));
+
     Keyboard.dismiss();
     setState(iState);
     setPhoto("");
+    navigation.navigate("PostsScreen");
   };
 
   const handleFocus = (input) => {
@@ -83,26 +107,27 @@ export default function CreatePostsScreen({ navigation }) {
             />
           </View>
         )}
-
-        <Text style={styles.mainText}>Upload photo</Text>
+        <Text style={styles.mainText}>{photo ? "Redact" : "Upload"} photo</Text>
 
         <KeyboardAvoidingView
           behavior={Platform.OS == "ios" ? "padding" : "height"}
         >
           <View style={styles.form}>
             <TextInput
-              placeholder="Name..."
+              placeholder="Title..."
               style={{
                 ...styles.inputName,
-                borderColor: isFocused.name ? "#FF6C00" : "#E8E8E8",
+                borderColor: isFocused.title ? "#FF6C00" : "#E8E8E8",
               }}
               onFocus={() => {
-                handleFocus("name");
+                handleFocus("title");
               }}
               onBlur={() => {
-                handleBlur("name");
+                handleBlur("title");
               }}
-              onChangeText={(value) => setState((p) => ({ ...p, name: value }))}
+              onChangeText={(value) =>
+                setState((p) => ({ ...p, title: value }))
+              }
               value={state.name}
             />
             <View>
@@ -139,7 +164,11 @@ export default function CreatePostsScreen({ navigation }) {
               <Text style={styles.uploadBtnTitleActive}>Upload</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity activeOpacity={0.8} style={styles.deleteBtn}>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              style={styles.deleteBtn}
+              onPress={openCamera}
+            >
               <AntDesign
                 style={styles.deleteSvg}
                 name="delete"
