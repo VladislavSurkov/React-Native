@@ -2,22 +2,21 @@ import React, { useEffect } from "react";
 import { View, Text, Image } from "react-native";
 import { mainStyles as styles } from "./main.styles";
 import { useDispatch, useSelector } from "react-redux";
-import authSelectors from './../../redux/auth/authSelectors';
-import postsSelectors from './../../redux/posts/postsSelectors';
-import { getAllPosts } from './../../redux/posts/postsOperation';
+import authSelectors from "./../../redux/auth/authSelectors";
+import postsSelectors from "./../../redux/posts/postsSelectors";
+import { getAllPosts } from "./../../redux/posts/postsOperation";
 import { ScrollView } from "react-native-gesture-handler";
 import PostCard from "../../Components/PostCard";
 
 export default function PostsScreen() {
   const posts = useSelector(postsSelectors.getPosts);
-  console.log(posts);
-    const user = useSelector(authSelectors.getUser);
-    const dispatch = useDispatch();
+  const user = useSelector(authSelectors.getUser);
+  const dispatch = useDispatch();
 
-    useEffect(() => {
-      dispatch(getAllPosts());
-    }, [dispatch]);
-  
+  useEffect(() => {
+    dispatch(getAllPosts());
+  }, [dispatch]);
+
   return (
     <ScrollView style={{ flex: 1 }}>
       <View style={styles.postsContainer}>

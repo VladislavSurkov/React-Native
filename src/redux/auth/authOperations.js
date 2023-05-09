@@ -75,7 +75,6 @@ export const authUpdateAvatar = (photoURL) => async (dispatch) => {
         userAvatar: photoURL,
       })
     );
-    console.log("update",photoURL);
   } catch (error) {
     toastError(error);
   }
