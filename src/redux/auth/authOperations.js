@@ -10,7 +10,7 @@ import { auth } from "../../firebase/config";
 import { toastError } from "../../helpers/toastMessage";
 
 export const register =
-  async ({ login, email, password }) =>
+  ({ login, email, password, photoURL }) =>
   async (dispatch) => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
@@ -35,7 +35,7 @@ export const register =
   };
 
 export const login =
-  async ({ email, password }) =>
+  ({ email, password }) =>
   async (dispatch) => {
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);

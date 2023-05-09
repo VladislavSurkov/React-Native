@@ -33,7 +33,7 @@ export default function RegistrationScreen({ navigation }) {
   const [isFocused, setIsFocused] = useState(iFocus);
   const [state, setState] = useState(iState);
   const [showPassword, setShowPassword] = useState(true);
-  const [avatarImg, setAvatarImg] = useState("");
+  const [photoURL, setPhotoURL] = useState("");
 
   const handleFocus = (input) => {
     setIsFocused((p) => ({ ...p, [input]: true }));
@@ -43,7 +43,7 @@ export default function RegistrationScreen({ navigation }) {
   };
 
   const handleSubmit = () => {
-    if (avatarImg === "") {
+    if (photoURL === "") {
       Toast.show({
         type: "error",
         text1: "Avatar error:",
@@ -51,11 +51,7 @@ export default function RegistrationScreen({ navigation }) {
       });
       return;
     }
-    if (
-      values.email === "" ||
-      values.password === "" ||
-      values.nickname === ""
-    ) {
+    if (state.email === "" || state.password === "" || state.nickname === "") {
       Toast.show({
         type: "error",
         text1: "Form error:",
@@ -63,7 +59,7 @@ export default function RegistrationScreen({ navigation }) {
       });
       return;
     }
-    dispatch(register(state));
+    dispatch(register({ ...state, photoURL }));
     setState(iState);
   };
 
@@ -77,7 +73,7 @@ export default function RegistrationScreen({ navigation }) {
           <View style={styles.regScr}>
             <View style={styles.avatarWrapper}>
               <View style={styles.avatar}>
-                <Avatar avatarImg={avatarImg} setAvatarImg={setAvatarImg} />
+                <Avatar avatarImg={photoURL} setAvatarImg={setPhotoURL} />
               </View>
             </View>
 

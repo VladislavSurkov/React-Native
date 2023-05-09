@@ -39,11 +39,11 @@ export default function LoginScreen({ navigation }) {
   };
 
   const handleSubmit = () => {
-    if (values.email === "" || values.password === "") {
+    if (state.email === "" || state.password === "") {
       Toast.show({
         type: "error",
         text1: "Form error:",
-        text2: "Email and Password must be filled ."
+        text2: "Email and Password must be filled .",
       });
       return;
     }
