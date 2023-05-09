@@ -12,8 +12,14 @@ export default function Avatar({ avatarImg, setAvatarImg }) {
 
   const addImage = async () => {
 
-    if (avatarImg && user.currentUser) {
+    if (avatarImg && !user.currentUser) {
       dispatch(authUpdateAvatar(""));
+      setAvatarImg("");
+      return;
+    }
+
+    if (avatarImg && user.currentUser) {
+        dispatch(authUpdateAvatar(""));
       // dispatch(deleteAvatar(avatarImg, ""));
       setAvatarImg("");
       return;

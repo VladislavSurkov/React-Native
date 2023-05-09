@@ -3,6 +3,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StyleSheet } from "react-native";
 import { EvilIcons, Feather } from "@expo/vector-icons";
 
+
 export default function PostCard({
   likeCount,
   title,
@@ -16,9 +17,8 @@ export default function PostCard({
 
   const navigation = useNavigation();
 
-    const onPressCommentsIcon = () => {
-
-    // navigation.navigate("Comments", { imgUri, comments, postId: post.id });
+  const onPressCommentsIcon = () => {
+    navigation.navigate("Comments", { imgUri, comments, postId: post.id });
   };
   return (
     <View style={styles.container}>

@@ -55,7 +55,7 @@ export const mainStyles = StyleSheet.create({
   postsAvatarImg: {
     width: 60,
     height: 60,
-    borderRadius: 10
+    borderRadius: 10,
   },
 
   postsAvatarData: {
@@ -80,43 +80,41 @@ export const mainStyles = StyleSheet.create({
   profileImgBg: {
     flex: 1,
     resizeMode: "contain",
-    alignItems: "center",
+    // alignItems: "center",
     justifyContent: "flex-end",
   },
   profileRegScr: {
-    paddingHorizontal: 16,
-    width: "100%",
-    height: "85%",
-
-    backgroundColor: "#FFFFFF",
+    position: "relative",
+    flex: 1,
+    marginTop: 147,
+    paddingTop: 92,
+    backgroundColor: "#ffffff",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-    position: "relative",
   },
   profileAvatarBox: {
-    width: 120,
-    height: 120,
-    backgroundColor: "#F6F6F6",
-    borderRadius: 16,
-    marginTop: -60,
-    alignSelf: "center",
-    marginBottom: 32,
-    alignItems: "flex-end",
+    position: "absolute",
+    top: 0,
+    right: 0,
+    left: 0,
+    height: 0,
+    justifyContent: "center",
+    alignItems: "center",
   },
   profileAvatarImg: {
-    height: "100%",
-    width: "100%",
-    borderRadius: 16,
-    resizeMode: "contain",
+    position: "absolute",
+  },
+  exitBtn: {
+    position: "absolute",
+    right: 0,
+    top: 30,
+    alignSelf: "flex-end",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 16,
+    marginBottom: 30,
   },
 
-  profileAddRemovePhoto: {
-    backgroundColor: "#fff",
-    position: "absolute",
-    left: 108,
-    top: 80,
-    borderRadius: 25,
-  },
   profileAvatarName: {
     fontFamily: "RobotoMedium",
     fontSize: 30,

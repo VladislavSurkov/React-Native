@@ -9,7 +9,8 @@ import { ScrollView } from "react-native-gesture-handler";
 import PostCard from "../../Components/PostCard";
 
 export default function PostsScreen() {
-    const posts = useSelector(postsSelectors.getPosts);
+  const posts = useSelector(postsSelectors.getPosts);
+  console.log(posts);
     const user = useSelector(authSelectors.getUser);
     const dispatch = useDispatch();
 

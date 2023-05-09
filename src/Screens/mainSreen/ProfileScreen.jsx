@@ -1,19 +1,30 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { View, Text, ImageBackground, Image } from "react-native";
+import { useSelector } from "react-redux";
+import { View, Text, ImageBackground } from "react-native";
 import { mainStyles as styles } from "./main.styles";
 
 import Avatar from "../../Components/Avatar";
 import authSelectors from "../../redux/auth/authSelectors";
 import PostCard from "../../Components/PostCard";
 import postsSelectors from "../../redux/posts/postsSelectors";
-import { ScrollView } from "react-native-gesture-handler";
+import { FlatList } from "react-native-gesture-handler";
+import LogOutIcon from "./../../Components/LogoutIcon";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+
+const Empty = ({ height, ...another }) => (
+  <View style={{ backgroundColor: "#ffffff", height }} {...another} />
+);
 
 export default function ProfileScreen() {
   const user = useSelector(authSelectors.getUser);
   const [photoURL, setPhotoURL] = useState(user.userAvatar);
-  const dispatch = useDispatch();
-   const posts = useSelector(postsSelectors.getPosts);
+
+  const posts = useSelector(postsSelectors.getOwnPosts)
+    .slice()
+    .sort((a, b) => {
+      return b.createdAt - a.createdAt;
+    });
 
   return (
     <View style={styles.profileContainer}>
@@ -21,30 +32,64 @@ export default function ProfileScreen() {
         style={styles.profileImgBg}
         source={require("../../../assets/img/PhotoBG.jpg")}
       >
-        <View style={styles.profileRegScr}>
-          <View style={styles.profileAvatarBox}>
-            <Avatar avatarImg={photoURL} setAvatarImg={setPhotoURL} />
-          </View>
-          <Text style={styles.profileAvatarName}>{user.nickName}</Text>
-          <ScrollView>
-            <View>
-              {posts.map((post) => (
-                <View key={post.id} style={{ marginBottom: 10 }}>
-                  <PostCard
-                    title={post.title}
-                    likeCount={post.likeCount}
-                    imgUrl={post.imgUrl}
-                    imgUri={post.imgUri}
-                    location={post.location}
-                    locationData={post.locationData}
-                    comments={post.comments}
-                    post={post}
-                  />
+        <SafeAreaView style={{ flex: 1 }}>
+          <FlatList
+            data={posts}
+            ListHeaderComponent={
+              <View style={styles.profileRegScr}>
+                <View style={styles.profileAvatarBox}>
+                  <View style={styles.profileAvatarImg}>
+                    <Avatar avatarImg={photoURL} setAvatarImg={setPhotoURL} />
+                  </View>
                 </View>
-              ))}
-            </View>
-          </ScrollView>
-        </View>
+                <View style={styles.exitBtn}>
+                  <LogOutIcon />
+                </View>
+
+                <Text style={[styles.profileAvatarName]}>{user.nickName}</Text>
+              </View>
+            }
+            ItemSeparatorComponent={() => <Empty height={32} />}
+            renderItem={({ item }) => (
+              <View
+                style={{ paddingHorizontal: 16, backgroundColor: "#ffffff" }}
+              >
+                <PostCard
+                  title={item.title}
+                  likeCount={item.likeCount}
+                  imgUrl={item.imgUrl}
+                  imgUri={item.imgUri}
+                  location={item.location}
+                  locationData={item.locationData}
+                  comments={item.comments}
+                  post={item}
+                />
+              </View>
+            )}
+            ListEmptyComponent={
+              <View
+                style={{
+                  height: 100,
+                  backgroundColor: "#ffffff",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text>You don't have posts yet</Text>
+              </View>
+            }
+            ListFooterComponent={<Empty height={43} />}
+          />
+
+          <View
+            style={{
+              marginTop: -1,
+              flexGrow: 10 ** 10,
+              width: "100%",
+              backgroundColor: "#ffffff",
+            }}
+          />
+        </SafeAreaView>
       </ImageBackground>
     </View>
   );

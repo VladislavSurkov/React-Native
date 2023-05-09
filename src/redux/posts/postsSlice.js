@@ -22,7 +22,7 @@ export const postsSlice = createSlice({
       ...state,
       comments: payload,
     }),
-    reset: () => ({...initialState})
+    reset: () => initialState
   },
 });
 
