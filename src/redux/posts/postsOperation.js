@@ -6,6 +6,7 @@ import {
   getCountFromServer,
   where,
   doc,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase/config";
 
@@ -104,7 +105,19 @@ export const uploadPostToServer = (post) => async (dispatch, getState) => {
     toastError(e);
   }
 };
-
+export const updatePost = (id, payload) => async (dispatch, getState) => {
+  try {
+    const washingtonRef = await doc(db, "posts", id);
+    await updateDoc(washingtonRef, {
+      ...payload
+    });
+    dispatch(getAllPosts());
+    dispatch(getOwnPosts());
+  } catch (e) {
+    console.log(e);
+    toastError(e);
+  }
+}
 export const addCommentByPostID =
   (postId, commentData) => async (dispatch, getState) => {
     try {

@@ -1,47 +1,73 @@
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StyleSheet } from "react-native";
-import { EvilIcons, Feather } from "@expo/vector-icons";
+import { AntDesign, EvilIcons, Feather } from "@expo/vector-icons";
+import { useDispatch } from "react-redux";
+import { updatePost } from "../redux/posts/postsOperation";
 
-
-export default function PostCard({
-  likeCount,
-  title,
-  location,
-  locationData,
-  imgUri,
-  comments,
-  post,
-}) {
-  const { countComments } = post;
-
+export default function PostCard(data) {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
+  const { countComments } = data.post;
+  const { likeCount } = data.post;
+
+  const updateLike = () => {
+    const like = likeCount + 1;
+    const payload = {
+      likeCount: like,
+    };
+    dispatch(updatePost(data.post.id, payload));
+  };
 
   const onPressCommentsIcon = () => {
-    navigation.navigate("Comments", { imgUri, comments, postId: post.id });
+    updateLike();
+    navigation.navigate("Comments", { imgUri, comments, postId: data.post.id });
   };
   return (
     <View style={styles.container}>
-      <Image style={styles.postsPhoto} source={{ uri: imgUri }} />
-      <Text style={styles.postsLocationName}>{title}</Text>
+      <Image style={styles.postsPhoto} source={{ uri: data.imgUri }} />
+      <Text style={styles.postsLocationName}>{data.title}</Text>
 
       <View style={styles.postsIconsContainer}>
+        <View style={{ flexDirection: "row" }}>
+          <TouchableOpacity
+            onPress={onPressCommentsIcon}
+            activeOpacity={0.8}
+            style={{ ...styles.postsInnerWrapperIcons }}
+          >
+            <Feather
+              name="message-circle"
+              size={24}
+              color={countComments === 0 ? "#BDBDBD" : "#FF6C00"}
+            />
+            <Text style={styles.postsMesseges}>{countComments}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={updateLike}
+            style={styles.postsInnerWrapperIcons}
+          >
+            <AntDesign
+              name={likeCount === 0 ? "like2" : "like1"}
+              size={24}
+              color="#FF6C00"
+            />
+
+            <Text style={styles.postsMesseges}>{likeCount}</Text>
+          </TouchableOpacity>
+        </View>
+
         <TouchableOpacity
-          onPress={onPressCommentsIcon}
-          activeOpacity={0.8}
-          style={styles.postsInnerWrapperIcons}
-        >
-          <Feather name="message-circle" size={24} color="#BDBDBD" />
-          <Text style={styles.postsMesseges}>{countComments}</Text>
-        </TouchableOpacity>
-        {/* <AntDesign name="like2" size={24} color="black" /> */}
-        <TouchableOpacity
-          onPress={() => navigation.navigate("Map", { location, locationData })}
+          onPress={() =>
+            navigation.navigate("Map", {
+              location: data.location,
+              locationData: data.locationData,
+            })
+          }
           activeOpacity={0.8}
           style={styles.postsInnerWrapperIcons}
         >
           <EvilIcons name="location" size={24} color="#BDBDBD" />
-          <Text style={styles.postsLocation}>{location}</Text>
+          <Text style={styles.postsLocation}>{data.location}</Text>
         </TouchableOpacity>
       </View>
     </View>

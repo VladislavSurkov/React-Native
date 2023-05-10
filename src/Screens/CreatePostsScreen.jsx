@@ -17,7 +17,8 @@ import {
   KeyboardAvoidingView,
   Keyboard,
 } from "react-native";
-
+import { Toast } from "react-native-toast-message/lib/src/Toast";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 const iState = {
   title: "",
@@ -35,6 +36,7 @@ export default function CreatePostsScreen({ navigation }) {
   const [location, setLocation] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
   const [photo, setPhoto] = useState("");
+  const [disabled, setDis] = useState(false);
   const dispatch = useDispatch();
 
   const makePhoto = async () => {
@@ -52,6 +54,16 @@ export default function CreatePostsScreen({ navigation }) {
   };
 
   const uploadPhoto = async () => {
+    if (!photo || !state.title || !state.place) {
+      Toast.show({
+        type: "error",
+        text1: "Completed error:",
+        text2: "All fields must be completed",
+      });
+      return;
+    }
+    setDis(true);
+    Keyboard.dismiss();
     const photoUrl = await uploadPhotoToServer(photo, firebaseStore.post);
     const data = {
       ...state,
@@ -74,9 +86,9 @@ export default function CreatePostsScreen({ navigation }) {
     };
     dispatch(uploadPostToServer(newPost));
 
-    Keyboard.dismiss();
     setState(iState);
     setPhoto("");
+    setDis(false);
     navigation.navigate("PostsScreen");
   };
 
@@ -88,98 +100,107 @@ export default function CreatePostsScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
-        {photo ? (
-          <View style={styles.photoContainer}>
-            <Image source={{ uri: photo }} style={styles.photo} />
-            <TouchableOpacity style={styles.svgConatiner} onPress={openCamera}>
-              <Feather name="camera" size={20} color="#FFFFFF" />
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <View style={styles.photoContainer}>
-            <CameraComponent
-              location={location}
-              photo={photo}
-              makePhoto={makePhoto}
-              setCameraRef={setCameraRef}
-            />
-          </View>
-        )}
-        <Text style={styles.mainText}>{photo ? "Redact" : "Upload"} photo</Text>
-
-        <KeyboardAvoidingView
-          behavior={Platform.OS == "ios" ? "padding" : "height"}
-        >
-          <View style={styles.form}>
-            <TextInput
-              placeholder="Title..."
-              style={{
-                ...styles.inputName,
-                borderColor: isFocused.title ? "#FF6C00" : "#E8E8E8",
-              }}
-              onFocus={() => {
-                handleFocus("title");
-              }}
-              onBlur={() => {
-                handleBlur("title");
-              }}
-              onChangeText={(value) =>
-                setState((p) => ({ ...p, title: value }))
-              }
-              value={state.name}
-            />
-            <View>
-              <EvilIcons
-                style={styles.iconLocation}
-                name="location"
-                size={24}
-                color="#BDBDBD"
-              />
-              <TextInput
-                style={{
-                  ...styles.inputLocation,
-                  borderColor: isFocused.place ? "#FF6C00" : "#E8E8E8",
-                }}
-                placeholder="Location..."
-                onFocus={() => {
-                  handleFocus("place");
-                }}
-                onBlur={() => {
-                  handleBlur("place");
-                }}
-                value={state.place}
-                onChangeText={(value) =>
-                  setState((p) => ({ ...p, place: value }))
-                }
+      <View style={styles.container}>
+        <View style={styles.wrapper}>
+          {photo ? (
+            <View style={styles.photoContainer}>
+              <Image source={{ uri: photo }} style={styles.photo} />
+              <TouchableOpacity
+                style={styles.svgConatiner}
+                onPress={openCamera}
+              >
+                <Feather name="camera" size={20} color="#FFFFFF" />
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <View style={styles.photoContainer}>
+              <CameraComponent
+                location={location}
+                photo={photo}
+                makePhoto={makePhoto}
+                setCameraRef={setCameraRef}
               />
             </View>
+          )}
+          <Text style={styles.mainText}>
+            {photo ? "Redact" : "Upload"} photo
+          </Text>
 
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={styles.uploadBtnActive}
-              onPress={uploadPhoto}
-            >
-              <Text style={styles.uploadBtnTitleActive}>Upload</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={styles.deleteBtn}
-              onPress={openCamera}
-            >
-              <AntDesign
-                style={styles.deleteSvg}
-                name="delete"
-                size={25}
-                color="#DADADA"
+          <KeyboardAvoidingView
+            behavior={Platform.OS == "ios" ? "padding" : "height"}
+          >
+            <View style={styles.form}>
+              <TextInput
+                placeholder="Title..."
+                style={{
+                  ...styles.inputName,
+                  borderColor: isFocused.title ? "#FF6C00" : "#E8E8E8",
+                }}
+                onFocus={() => {
+                  handleFocus("title");
+                }}
+                onBlur={() => {
+                  handleBlur("title");
+                }}
+                onChangeText={(value) =>
+                  setState((p) => ({ ...p, title: value }))
+                }
+                value={state.name}
               />
-            </TouchableOpacity>
-          </View>
-        </KeyboardAvoidingView>
+              <View>
+                <EvilIcons
+                  style={styles.iconLocation}
+                  name="location"
+                  size={24}
+                  color="#BDBDBD"
+                />
+                <TextInput
+                  style={{
+                    ...styles.inputLocation,
+                    borderColor: isFocused.place ? "#FF6C00" : "#E8E8E8",
+                  }}
+                  placeholder="Location..."
+                  onFocus={() => {
+                    handleFocus("place");
+                  }}
+                  onBlur={() => {
+                    handleBlur("place");
+                  }}
+                  value={state.place}
+                  onChangeText={(value) =>
+                    setState((p) => ({ ...p, place: value }))
+                  }
+                />
+              </View>
+
+              <TouchableOpacity
+                activeOpacity={0.8}
+                disabled={disabled}
+                style={{
+                  ...styles.uploadBtnActive,
+                  backgroundColor: disabled ? "#BDBDBD" : "#FF6C00",
+                }}
+                onPress={uploadPhoto}
+              >
+                <Text style={styles.uploadBtnTitleActive}>Upload</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                activeOpacity={0.8}
+                style={styles.deleteBtn}
+                onPress={openCamera}
+              >
+                <AntDesign
+                  style={styles.deleteSvg}
+                  name="delete"
+                  size={25}
+                  color="#DADADA"
+                />
+              </TouchableOpacity>
+            </View>
+          </KeyboardAvoidingView>
+        </View>
       </View>
-    </View>
   );
 }
 
@@ -260,7 +281,6 @@ const styles = StyleSheet.create({
     height: 51,
   },
   uploadBtnActive: {
-    backgroundColor: "#FF6C00",
     borderRadius: 100,
     paddingVertical: 16,
     justifyContent: "center",

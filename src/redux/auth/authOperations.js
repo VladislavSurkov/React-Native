@@ -81,20 +81,22 @@ export const authUpdateAvatar = (photoURL) => async (dispatch) => {
 };
 
 export const deleteAvatar = (photoURL, str) => async (dispatch) => {
-  // const storage = getStorage();
+//   console.log(photoURL);
+//   const storage = getStorage();
 
-  // const desertRef = ref(storage, photoURL);
-
-  // deleteObject(desertRef)
-  //   .then(() => {
-  //      dispatch(
-  //        authSlice.actions.updateUserAvatar({
-  //          userAvatar: str,
-  //        })
-  //      );
-  //     console.log("ok");
-  //   })
-  //   .catch((error) => {});
+//   const desertRef = ref(storage, photoURL);
+// console.log(desertRef);
+//   deleteObject(desertRef)
+//     .then(() => {
+//       console.log("del");
+//        dispatch(
+//          authSlice.actions.updateUserAvatar({
+//            userAvatar: str,
+//          })
+//        );
+//       console.log("ok");
+//     })
+//     .catch((error) => {});
 };
 
 export const authCurrentUser = () => async (dispatch) => {
