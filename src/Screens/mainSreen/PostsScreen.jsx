@@ -33,16 +33,7 @@ export default function PostsScreen() {
         <View>
           {posts.map((post) => (
             <View key={post.id} style={{ marginBottom: 10 }}>
-              <PostCard
-                title={post.title}
-                likeCount={post.likeCount}
-                imgUrl={post.imgUrl}
-                imgUri={post.imgUri}
-                location={post.location}
-                locationData={post.locationData}
-                comments={post.comments}
-                post={post}
-              />
+              <PostCard post={post} />
             </View>
           ))}
         </View>

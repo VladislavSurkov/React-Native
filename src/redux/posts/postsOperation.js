@@ -14,7 +14,6 @@ import { postsAction } from "./postsSlice";
 import { toastError } from "../../helpers/toastMessage";
 import moment from "moment/moment";
 
-
 export const getAllPosts = () => async (dispatch, getState) => {
   try {
     const { userId } = getState().auth;
@@ -109,7 +108,7 @@ export const updatePost = (id, payload) => async (dispatch, getState) => {
   try {
     const washingtonRef = await doc(db, "posts", id);
     await updateDoc(washingtonRef, {
-      ...payload
+      ...payload,
     });
     dispatch(getAllPosts());
     dispatch(getOwnPosts());
@@ -117,7 +116,7 @@ export const updatePost = (id, payload) => async (dispatch, getState) => {
     console.log(e);
     toastError(e);
   }
-}
+};
 export const addCommentByPostID =
   (postId, commentData) => async (dispatch, getState) => {
     try {
@@ -149,7 +148,7 @@ export const getAllCommentsByPostId = (postId) => async (dispatch) => {
     const payload = comments.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,
-      date: moment(doc.data().date).format('LLL'),
+      date: moment(doc.data().date).format("LLL"),
       dateForSort: doc.data().date,
     }));
 

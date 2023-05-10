@@ -68,7 +68,7 @@ export const logout = () => async (dispatch) => {
 export const authUpdateAvatar = (photoURL) => async (dispatch) => {
   try {
     const user = auth.currentUser;
-    if (user) await updateProfile(auth.currentUser, { photoURL });
+    if (user) await updateProfile(user, { photoURL });
 
     dispatch(
       authSlice.actions.updateUserAvatar({
@@ -81,22 +81,21 @@ export const authUpdateAvatar = (photoURL) => async (dispatch) => {
 };
 
 export const deleteAvatar = (photoURL, str) => async (dispatch) => {
-//   console.log(photoURL);
-//   const storage = getStorage();
-
-//   const desertRef = ref(storage, photoURL);
-// console.log(desertRef);
-//   deleteObject(desertRef)
-//     .then(() => {
-//       console.log("del");
-//        dispatch(
-//          authSlice.actions.updateUserAvatar({
-//            userAvatar: str,
-//          })
-//        );
-//       console.log("ok");
-//     })
-//     .catch((error) => {});
+  //   console.log(photoURL);
+  //   const storage = getStorage();
+  //   const desertRef = ref(storage, photoURL);
+  // console.log(desertRef);
+  //   deleteObject(desertRef)
+  //     .then(() => {
+  //       console.log("del");
+  //        dispatch(
+  //          authSlice.actions.updateUserAvatar({
+  //            userAvatar: str,
+  //          })
+  //        );
+  //       console.log("ok");
+  //     })
+  //     .catch((error) => {});
 };
 
 export const authCurrentUser = () => async (dispatch) => {

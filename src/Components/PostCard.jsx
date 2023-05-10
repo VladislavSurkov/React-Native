@@ -5,35 +5,34 @@ import { AntDesign, EvilIcons, Feather } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import { updatePost } from "../redux/posts/postsOperation";
 
-export default function PostCard(data) {
+export default function PostCard({post}) {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const { countComments } = data.post;
-  const { likeCount } = data.post;
+  const { countComments, comments, likeCount } = post;
+  const { id, imgUri, title, location, locationData } = post;
 
   const updateLike = () => {
     const like = likeCount + 1;
     const payload = {
       likeCount: like,
     };
-    dispatch(updatePost(data.post.id, payload));
+    dispatch(updatePost(id, payload));
   };
 
   const onPressCommentsIcon = () => {
-    updateLike();
-    navigation.navigate("Comments", { imgUri, comments, postId: data.post.id });
+    navigation.navigate("Comments", { imgUri, comments, postId: id });
   };
   return (
     <View style={styles.container}>
-      <Image style={styles.postsPhoto} source={{ uri: data.imgUri }} />
-      <Text style={styles.postsLocationName}>{data.title}</Text>
+      <Image style={styles.postsPhoto} source={{ uri: imgUri }} />
+      <Text style={styles.postsLocationName}>{title}</Text>
 
       <View style={styles.postsIconsContainer}>
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity
             onPress={onPressCommentsIcon}
             activeOpacity={0.8}
-            style={{ ...styles.postsInnerWrapperIcons }}
+            style={{ ...styles.postsInnerWrapperIcons, marginRight: 24 }}
           >
             <Feather
               name="message-circle"
@@ -42,6 +41,7 @@ export default function PostCard(data) {
             />
             <Text style={styles.postsMesseges}>{countComments}</Text>
           </TouchableOpacity>
+
           <TouchableOpacity
             onPress={updateLike}
             style={styles.postsInnerWrapperIcons}
@@ -51,23 +51,17 @@ export default function PostCard(data) {
               size={24}
               color="#FF6C00"
             />
-
             <Text style={styles.postsMesseges}>{likeCount}</Text>
           </TouchableOpacity>
         </View>
 
         <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("Map", {
-              location: data.location,
-              locationData: data.locationData,
-            })
-          }
+          onPress={() => navigation.navigate("Map", { location, locationData })}
           activeOpacity={0.8}
           style={styles.postsInnerWrapperIcons}
         >
           <EvilIcons name="location" size={24} color="#BDBDBD" />
-          <Text style={styles.postsLocation}>{data.location}</Text>
+          <Text style={styles.postsLocation}>{location}</Text>
         </TouchableOpacity>
       </View>
     </View>

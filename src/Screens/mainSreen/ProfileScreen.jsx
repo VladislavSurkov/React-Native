@@ -11,11 +11,6 @@ import { FlatList } from "react-native-gesture-handler";
 import LogOutIcon from "./../../Components/LogoutIcon";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-
-const Empty = ({ height, ...another }) => (
-  <View style={{ backgroundColor: "#ffffff", height }} {...another} />
-);
-
 export default function ProfileScreen() {
   const user = useSelector(authSelectors.getUser);
   const [photoURL, setPhotoURL] = useState(user.userAvatar);
@@ -49,21 +44,11 @@ export default function ProfileScreen() {
                 <Text style={[styles.profileAvatarName]}>{user.nickName}</Text>
               </View>
             }
-            ItemSeparatorComponent={() => <Empty height={32} />}
             renderItem={({ item }) => (
               <View
                 style={{ paddingHorizontal: 16, backgroundColor: "#ffffff" }}
               >
-                <PostCard
-                  title={item.title}
-                  likeCount={item.likeCount}
-                  imgUrl={item.imgUrl}
-                  imgUri={item.imgUri}
-                  location={item.location}
-                  locationData={item.locationData}
-                  comments={item.comments}
-                  post={item}
-                />
+                <PostCard post={item} />
               </View>
             )}
             ListEmptyComponent={
@@ -78,7 +63,6 @@ export default function ProfileScreen() {
                 <Text>You don't have posts yet</Text>
               </View>
             }
-            ListFooterComponent={<Empty height={43} />}
           />
 
           <View
