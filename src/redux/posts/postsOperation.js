@@ -1,3 +1,4 @@
+import moment from "moment/moment";
 import {
   addDoc,
   collection,
@@ -7,12 +8,13 @@ import {
   where,
   doc,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase/config";
+import { deleteObject, getStorage, ref } from "firebase/storage";
 
 import { postsAction } from "./postsSlice";
-import { toastError } from "../../helpers/toastMessage";
-import moment from "moment/moment";
+import { toastError, toastSuccses } from "../../helpers/toastMessage";
 
 export const getAllPosts = () => async (dispatch, getState) => {
   try {
@@ -104,7 +106,8 @@ export const uploadPostToServer = (post) => async (dispatch, getState) => {
     toastError(e);
   }
 };
-export const updatePost = (id, payload) => async (dispatch, getState) => {
+
+export const updatePost = (id, payload) => async (dispatch) => {
   try {
     const washingtonRef = await doc(db, "posts", id);
     await updateDoc(washingtonRef, {
@@ -113,10 +116,25 @@ export const updatePost = (id, payload) => async (dispatch, getState) => {
     dispatch(getAllPosts());
     dispatch(getOwnPosts());
   } catch (e) {
-    console.log(e);
     toastError(e);
   }
 };
+
+export const deleteP = (id, photoURL) => async () => {
+  const storage = getStorage();
+  const desertRef = ref(storage, photoURL);
+
+  await deleteDoc(doc(db, "posts", id));
+
+  deleteObject(desertRef)
+    .then(() => {
+      toastSuccses({ message: "Post deleted successfully" });
+    })
+    .catch((error) => {
+      toastError(error);
+    });
+};
+
 export const addCommentByPostID =
   (postId, commentData) => async (dispatch, getState) => {
     try {

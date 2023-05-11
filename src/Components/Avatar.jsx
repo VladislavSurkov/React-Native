@@ -11,19 +11,12 @@ export default function Avatar({ avatarImg, setAvatarImg }) {
   const user = useSelector(authSelectors.getUser);
 
   const addImage = async () => {
-
     if (avatarImg) {
       dispatch(authUpdateAvatar(""));
       setAvatarImg("");
+      dispatch(deleteAvatar(avatarImg));
       return;
     }
-
-    // if (avatarImg && user.currentUser) {
-    //     dispatch(authUpdateAvatar(""));
-      // dispatch(deleteAvatar(avatarImg, ""));
-    //   setAvatarImg("");
-    //   return;
-    // }
 
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,

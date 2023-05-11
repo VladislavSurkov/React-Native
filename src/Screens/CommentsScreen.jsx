@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
   },
   svgArrow: {
     alignSelf: "center",
-    color:"#FFFFFF",
+    color: "#FFFFFF",
     borderRadius: 50,
     backgroundColor: "#FF6C00",
   },

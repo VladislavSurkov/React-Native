@@ -5,10 +5,10 @@ import { AntDesign, EvilIcons, Feather } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import { updatePost } from "../redux/posts/postsOperation";
 
-export default function PostCard({post}) {
+export default function PostCard({ post, update }) {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const { countComments, comments, likeCount } = post;
+  const { countComments, likeCount } = post;
   const { id, imgUri, title, location, locationData } = post;
 
   const updateLike = () => {
@@ -20,13 +20,22 @@ export default function PostCard({post}) {
   };
 
   const onPressCommentsIcon = () => {
-    navigation.navigate("Comments", { imgUri, comments, postId: id });
+    navigation.navigate("Comments", { imgUri, postId: id });
+  };
+
+  const redactPost = () => {
+    navigation.navigate("RedactPosts", { imgUri, title, place: location, id });
   };
   return (
     <View style={styles.container}>
-      <Image style={styles.postsPhoto} source={{ uri: imgUri }} />
+      {update ? (
+        <TouchableOpacity onPress={redactPost}>
+          <Image style={styles.postsPhoto} source={{ uri: imgUri }} />
+        </TouchableOpacity>
+      ) : (
+        <Image style={styles.postsPhoto} source={{ uri: imgUri }} />
+      )}
       <Text style={styles.postsLocationName}>{title}</Text>
-
       <View style={styles.postsIconsContainer}>
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity

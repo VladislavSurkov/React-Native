@@ -8,7 +8,7 @@ import {
 import { getStorage, ref, deleteObject } from "firebase/storage";
 import { authSlice } from "./authSlice";
 import { auth } from "../../firebase/config";
-import { toastError } from "../../helpers/toastMessage";
+import { toastError, toastSuccses } from "../../helpers/toastMessage";
 import { postsAction } from "../posts/postsSlice";
 
 export const register =
@@ -80,22 +80,17 @@ export const authUpdateAvatar = (photoURL) => async (dispatch) => {
   }
 };
 
-export const deleteAvatar = (photoURL, str) => async (dispatch) => {
-  //   console.log(photoURL);
-  //   const storage = getStorage();
-  //   const desertRef = ref(storage, photoURL);
-  // console.log(desertRef);
-  //   deleteObject(desertRef)
-  //     .then(() => {
-  //       console.log("del");
-  //        dispatch(
-  //          authSlice.actions.updateUserAvatar({
-  //            userAvatar: str,
-  //          })
-  //        );
-  //       console.log("ok");
-  //     })
-  //     .catch((error) => {});
+export const deleteAvatar = (photoURL) => async () => {
+  const storage = getStorage();
+  const desertRef = ref(storage, photoURL);
+
+  deleteObject(desertRef)
+    .then(() => {
+      toastSuccses({ message: "Photo deleted successfully" });
+    })
+    .catch((error) => {
+      toastError(error);
+    });
 };
 
 export const authCurrentUser = () => async (dispatch) => {

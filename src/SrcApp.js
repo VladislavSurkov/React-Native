@@ -12,6 +12,7 @@ import CommentsScreen from "./Screens/CommentsScreen";
 import MapScreen from "./Screens/MapScreen";
 import ReturnIcon from "./Components/ReturnIcon";
 import { mainStyles as styles } from "./Screens/mainSreen/main.styles";
+import RedactPostScreen from "./Screens/posts/RedactPostsScreen";
 
 const MainStack = createStackNavigator();
 const AuthStack = createStackNavigator();
@@ -45,6 +46,20 @@ export default function SrcApp() {
             component={MapScreen}
             options={{
               headerShown: true,
+              header: ({ _, route }) => (
+                <View style={styles.homeContainer}>
+                  <ReturnIcon />
+                  <Text style={styles.title}>{route.name}</Text>
+                </View>
+              ),
+            }}
+          />
+          <MainStack.Screen
+            name="RedactPosts"
+            component={RedactPostScreen}
+            options={{
+              headerShown: true,
+              tabBarStyle: { display: "none" },
               header: ({ _, route }) => (
                 <View style={styles.homeContainer}>
                   <ReturnIcon />

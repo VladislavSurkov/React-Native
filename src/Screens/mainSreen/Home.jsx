@@ -5,7 +5,7 @@ import { Text, View } from "react-native";
 import { mainStyles as styles } from "./main.styles";
 
 import LogOutIcon from "../../Components/LogoutIcon";
-import CreatePostsScreen from "../CreatePostsScreen";
+import CreatePostsScreen from "../posts/CreatePostsScreen";
 import ProfileScreen from "./ProfileScreen";
 import PostsScreen from "./PostsScreen";
 import ReturnIcon from "../../Components/ReturnIcon";

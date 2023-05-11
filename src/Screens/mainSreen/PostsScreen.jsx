@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { View, Text, Image } from "react-native";
 import { mainStyles as styles } from "./main.styles";
 import { useDispatch, useSelector } from "react-redux";
@@ -33,7 +33,7 @@ export default function PostsScreen() {
         <View>
           {posts.map((post) => (
             <View key={post.id} style={{ marginBottom: 10 }}>
-              <PostCard post={post} />
+              <PostCard post={post} update={false} />
             </View>
           ))}
         </View>

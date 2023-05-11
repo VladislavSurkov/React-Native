@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { View, Text, ImageBackground } from "react-native";
 import { mainStyles as styles } from "./main.styles";
 
@@ -10,16 +10,22 @@ import postsSelectors from "../../redux/posts/postsSelectors";
 import { FlatList } from "react-native-gesture-handler";
 import LogOutIcon from "./../../Components/LogoutIcon";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { getOwnPosts } from "../../redux/posts/postsOperation";
 
 export default function ProfileScreen() {
   const user = useSelector(authSelectors.getUser);
   const [photoURL, setPhotoURL] = useState(user.userAvatar);
+  const dispatch = useDispatch();
 
   const posts = useSelector(postsSelectors.getOwnPosts)
     .slice()
     .sort((a, b) => {
       return b.createdAt - a.createdAt;
     });
+
+  useEffect(() => {
+    dispatch(getOwnPosts());
+  }, [dispatch]);
 
   return (
     <View style={styles.profileContainer}>
@@ -48,7 +54,7 @@ export default function ProfileScreen() {
               <View
                 style={{ paddingHorizontal: 16, backgroundColor: "#ffffff" }}
               >
-                <PostCard post={item} />
+                <PostCard post={item} update={true} />
               </View>
             )}
             ListEmptyComponent={
