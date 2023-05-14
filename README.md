@@ -1,1 +1,1 @@
-https://expo.dev/@panda9820/AwesomeProject?serviceType=classic&distribution=expo-go&release-channel=prod-v1
+https://expo.dev/@panda9820/AwesomeProject?serviceType=classic&distribution=expo-go&release-channel=picswap
