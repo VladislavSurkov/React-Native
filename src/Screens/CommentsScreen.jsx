@@ -64,13 +64,18 @@ export default function CommentsScreen() {
                 { flexDirection: isOwner ? "row-reverse" : "row" },
               ]}
             >
-              <Image
-                source={{ uri: item.userAvatar }}
+              <View
                 style={[
-                  styles.authorAvatar,
+                  styles.containerUser,
                   { [isOwner ? "marginLeft" : "marginRight"]: 16 },
                 ]}
-              />
+              >
+                <Image
+                  source={{ uri: item.userAvatar }}
+                  style={styles.authorAvatar}
+                />
+                <Text style={styles.textAuthor}>{item.authorName}</Text>
+              </View>
               <View
                 style={[
                   styles.commentWrapper,
@@ -81,7 +86,7 @@ export default function CommentsScreen() {
                   },
                 ]}
               >
-                <Text style={styles.commentAuthor}>{item.comment}</Text>
+                <Text style={styles.textAuthor}>{item.comment}</Text>
                 <Text
                   style={[
                     styles.commentDate,
@@ -148,6 +153,9 @@ const styles = StyleSheet.create({
     height: 240,
     borderRadius: 8,
   },
+  containerUser: {
+    alignItems: "center",
+  },
 
   containerItem: {
     display: "flex",
@@ -166,7 +174,7 @@ const styles = StyleSheet.create({
     backgroundColor: " rgba(0, 0, 0, 0.03)",
     borderRadius: 16,
   },
-  commentAuthor: {
+  textAuthor: {
     marginBottom: 8,
 
     fontFamily: "RobotoRegular",

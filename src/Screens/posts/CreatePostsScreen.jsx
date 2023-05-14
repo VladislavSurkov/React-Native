@@ -70,8 +70,6 @@ export default function CreatePostsScreen({ navigation }) {
     const newPost = {
       id: uuid.v4(),
       title: data.title,
-      messageCount: 0,
-      likeCount: 0,
       imgUri: data.photo,
       location: data.place,
       locationData: {

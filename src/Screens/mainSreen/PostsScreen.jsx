@@ -4,7 +4,7 @@ import { mainStyles as styles } from "./main.styles";
 import { useDispatch, useSelector } from "react-redux";
 import authSelectors from "./../../redux/auth/authSelectors";
 import postsSelectors from "./../../redux/posts/postsSelectors";
-import { getAllPosts } from "./../../redux/posts/postsOperation";
+import { getAllPosts, getOwnPosts } from "./../../redux/posts/postsOperation";
 import { ScrollView } from "react-native-gesture-handler";
 import PostCard from "../../Components/PostCard";
 
@@ -15,6 +15,7 @@ export default function PostsScreen() {
 
   useEffect(() => {
     dispatch(getAllPosts());
+    dispatch(getOwnPosts());
   }, [dispatch]);
 
   return (

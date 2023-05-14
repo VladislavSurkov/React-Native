@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   posts: [],
@@ -7,7 +7,7 @@ const initialState = {
 };
 
 export const postsSlice = createSlice({
-  name: 'posts',
+  name: "posts",
   initialState,
   reducers: {
     updatePosts: (state, { payload }) => ({
@@ -22,7 +22,7 @@ export const postsSlice = createSlice({
       ...state,
       comments: payload,
     }),
-    reset: () => initialState
+    reset: () => initialState,
   },
 });
 

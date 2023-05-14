@@ -36,7 +36,6 @@ export const getAllPosts = () => async (dispatch, getState) => {
         collection(doc.ref, "likes"),
         where("authorId", "==", userId)
       );
-
       const likes = await getDocs(q);
       return {
         ...doc.data(),
@@ -113,6 +112,7 @@ export const updatePost = (id, payload) => async (dispatch) => {
     await updateDoc(washingtonRef, {
       ...payload,
     });
+
     dispatch(getAllPosts());
     dispatch(getOwnPosts());
   } catch (e) {
@@ -133,6 +133,46 @@ export const deleteP = (id, photoURL) => async () => {
     .catch((error) => {
       toastError(error);
     });
+};
+export const addLikeByPostID = (postId) => async (dispatch, getState) => {
+  try {
+    const { nickName, userId } = getState().auth;
+
+    const like = {
+      authorName: nickName,
+      authorId: userId,
+      date: Date.now(),
+      postId: postId,
+    };
+
+    const docRef = doc(db, "posts", postId);
+    await addDoc(collection(docRef, "likes"), { ...like });
+
+    dispatch(getAllPosts());
+    dispatch(getOwnPosts());
+  } catch (e) {
+    toastError(e);
+  }
+};
+
+export const deleteLikeByPostID = (postId) => async (dispatch, getState) => {
+  try {
+    const { userId } = getState().auth;
+    const docRef = doc(db, "posts", postId);
+    const q = query(
+      collection(docRef, "likes"),
+      where("authorId", "==", userId)
+    );
+    const like = await getDocs(q);
+    const id = like.docs.map((doc) => doc.id);
+
+    await deleteDoc(doc(docRef, "likes", ...id));
+
+    dispatch(getAllPosts());
+    dispatch(getOwnPosts());
+  } catch (e) {
+    toastError(e);
+  }
 };
 
 export const addCommentByPostID =

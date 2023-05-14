@@ -3,20 +3,17 @@ import { useNavigation } from "@react-navigation/native";
 import { StyleSheet } from "react-native";
 import { AntDesign, EvilIcons, Feather } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
-import { updatePost } from "../redux/posts/postsOperation";
+import { addLikeByPostID, deleteLikeByPostID } from "../redux/posts/postsOperation";
+
 
 export default function PostCard({ post, update }) {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const { countComments, likeCount } = post;
+  const { countComments, countLikes, isLiked } = post;
   const { id, imgUri, title, location, locationData } = post;
 
   const updateLike = () => {
-    const like = likeCount + 1;
-    const payload = {
-      likeCount: like,
-    };
-    dispatch(updatePost(id, payload));
+    !isLiked ? dispatch(addLikeByPostID(id)) : dispatch(deleteLikeByPostID(id));
   };
 
   const onPressCommentsIcon = () => {
@@ -56,11 +53,11 @@ export default function PostCard({ post, update }) {
             style={styles.postsInnerWrapperIcons}
           >
             <AntDesign
-              name={likeCount === 0 ? "like2" : "like1"}
+              name={countLikes === 0 ? "like2" : "like1"}
               size={24}
               color="#FF6C00"
             />
-            <Text style={styles.postsMesseges}>{likeCount}</Text>
+            <Text style={styles.postsMesseges}>{countLikes}</Text>
           </TouchableOpacity>
         </View>
 
